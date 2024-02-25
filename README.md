@@ -25,6 +25,8 @@
 
 ### Introducción
 
+Esta implementación constituye el sistema de seguridad del proyecto para la asignatura de Informática Industrial y el sistema de visión del robot móvil de la asignatura de Laboratorio de Robótica.
+
 La parte extra del proyecto consiste principalmente en tres implementaciones:
 
 - Uso de una cámara para poder ver lo que ve el robot el tiempo real. Además, poder controlar la posición de la cámara para orientarla en 360 grados, sacar fotos, guardarlas en una base de datos para poder recuperarlas posteriormente y usar el flash.

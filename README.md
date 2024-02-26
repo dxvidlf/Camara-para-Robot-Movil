@@ -389,7 +389,7 @@ El montaje real del prototipo queda así:
 
 #### Programación y lógica de funcionamiento
 
-En este proyecto, al conectarse a nuestra red la ESP32 Wrover Cam crea un servidor local donde se envía constantemente la /fotos/imagen tomada por su sensor, simulando un vídeo en streaming.
+En este proyecto, al conectarse a nuestra red la ESP32 Wrover Cam crea un servidor local donde se envía constantemente la imagen tomada por su sensor, simulando un vídeo en streaming.
 
 Para saber en qué IP local se encuentra conectada la cámara, esta informa de ello enviando su IP actula por MQTT a NodeRed. Por tanto, la /fotos/imagen de la cámara puede verse en la dirección http://192.168.1.XXX:81/stream.
 
@@ -397,7 +397,7 @@ La toma de fotos de la cámara se realiza mediante un htto request a dicho servi
 
 Además, la placa se suscribe a los topics correspondientes para poder recibir los comandos de movimiento de la misma, así como los comandos para controlar el flash.
 
-Sin embargo, la librería que se ha usado para controlar el motor paso a paso hace que cada vez que se quiera hacer girar dicho motor el programa principal quede bloqueado y por tanto "pausando" la /fotos/imagen en directo de la cámara. Para solventar esto, hemos hecho uso del anteriormente mencionado Arduino Nano, que queda conectado a la ESP32 Wrover Cam con dos pines digitales. Dichos pines codifican 4 estados posibles, con el siguiente significado:
+Sin embargo, la librería que se ha usado para controlar el motor paso a paso hace que cada vez que se quiera hacer girar dicho motor el programa principal quede bloqueado y por tanto "pausando" la imagen en directo de la cámara. Para solventar esto, hemos hecho uso del anteriormente mencionado Arduino Nano, que queda conectado a la ESP32 Wrover Cam con dos pines digitales. Dichos pines codifican 4 estados posibles, con el siguiente significado:
 
 | Pin "Left" | Pin "Right" | Significado|
 |--------------|--------------|--------------|
@@ -559,7 +559,7 @@ void procesa_mensaje(char* topic, byte* payload, unsigned int length) {
   }
 }
 ```
-Subfunción para la configuración de la instancia de la cámara. Dicha clase se define en la librería "esp_camera.h", incluida en este programa. Lo más relevante en esta subfunción es la calidad de /fotos/imagen configurada, y el número de buffers de lectura del sensor:
+Subfunción para la configuración de la instancia de la cámara. Dicha clase se define en la librería "esp_camera.h", incluida en este programa. Lo más relevante en esta subfunción es la calidad de imagen configurada, y el número de buffers de lectura del sensor:
 ```arduino
 void config_init() {
   config.ledc_channel = LEDC_CHANNEL_0;
@@ -747,7 +747,7 @@ Bucle principal del programa. Se comprueba constantemente el estado de los pines
 void loop() {
   if((digitalRead(left))&&(digitalRead(rigth))){
     Serial.println("Centrando cámara");
-    recuperarOrigen();
+    recuperarOrigen(); 
   }else if((digitalRead(left))&&(!digitalRead(rigth))){
     Serial.println("Girando a la izquierda");
     controlMotor(-1);
@@ -765,7 +765,7 @@ Para alojar la cámara y todos los elementos que componen su sistema de movimien
 
 ##### Carcasa de la ESP32 Wrover Cam
 
-Para el diseño de dicha carcasa, se ha partido de un diseño de internet para una ESP32 común, y se le han realizado todas las modificaciones necesarias para poder alojar nuestra ESP32 Wrover Cam. La carcasa se ha diseñado con un sistema de capas para la conexión de los cables y su traspaso a la caja por el eje que une la cámara al motor. Además, en la parte frontal se ha implantado un diseño de rejilla para proporcionarle ventilación al chip de la placa. Dicho diseño queda reflejado en la siguiente /fotos/imagen.
+Para el diseño de dicha carcasa, se ha partido de un diseño de internet para una ESP32 común, y se le han realizado todas las modificaciones necesarias para poder alojar nuestra ESP32 Wrover Cam. La carcasa se ha diseñado con un sistema de capas para la conexión de los cables y su traspaso a la caja por el eje que une la cámara al motor. Además, en la parte frontal se ha implantado un diseño de rejilla para proporcionarle ventilación al chip de la placa. Dicho diseño queda reflejado en la siguiente imagen.
 
 <p align="center">
   <img src="/fotos/image-16.png" alt="Descripción de la /fotos/imagen">
@@ -773,7 +773,7 @@ Para el diseño de dicha carcasa, se ha partido de un diseño de internet para u
 
 ##### Eje de movimiento
 
-Para unir la carcasa de la cámara con el eje del motor, se ha diseñado un eje que además de realizar la función de unión entre ambos componentes, proporcione tanto un hueco para el cable de la cámara como para el resto de cables de los pines, uniéndose la desembocadura de ambos zócalos al final del eje. Además, se han añadido elementos para la unión de las piezas despúes de su impresión, y un mástil que será el encargado de accionar el final de carrera en la calibración de la posición de la cámara. También se ha añadido un anillo al rededor del eje que evite el movimiento de la cámara en el eje Z. Dicho diseño queda reflejado en la siguiente /fotos/imagen.
+Para unir la carcasa de la cámara con el eje del motor, se ha diseñado un eje que además de realizar la función de unión entre ambos componentes, proporcione tanto un hueco para el cable de la cámara como para el resto de cables de los pines, uniéndose la desembocadura de ambos zócalos al final del eje. Además, se han añadido elementos para la unión de las piezas despúes de su impresión, y un mástil que será el encargado de accionar el final de carrera en la calibración de la posición de la cámara. También se ha añadido un anillo al rededor del eje que evite el movimiento de la cámara en el eje Z. Dicho diseño queda reflejado en la siguiente imagen.
 
 <p align="center">
   <img src="/fotos/image-17.png" alt="Descripción de la /fotos/imagen">
@@ -781,7 +781,7 @@ Para unir la carcasa de la cámara con el eje del motor, se ha diseñado un eje 
 
 ##### Zócalo para los componentes del sistema de movimiento
 
-La siguiente pieza es el zócalo donde se alojan todos los componentes del sistema de movimiento, como son el propio motor paso a paso, su driver, el Arduino Nano y el final de carrera. Se une a la caja del sistema de movimiento mediante unos taladros donde posteriormente irán alojados unos tornillos. Se han suavizado toods los bordes de la pieza para evitar que un cable accidentalmente pueda dañarse con algún borde filoso. Dicho diseño queda reflejado en la siguiente /fotos/imagen.
+La siguiente pieza es el zócalo donde se alojan todos los componentes del sistema de movimiento, como son el propio motor paso a paso, su driver, el Arduino Nano y el final de carrera. Se une a la caja del sistema de movimiento mediante unos taladros donde posteriormente irán alojados unos tornillos. Se han suavizado toods los bordes de la pieza para evitar que un cable accidentalmente pueda dañarse con algún borde filoso. Dicho diseño queda reflejado en la siguiente imagen.
 
 <p align="center">
   <img src="/fotos/image-18.png" alt="Descripción de la /fotos/imagen">
@@ -789,7 +789,7 @@ La siguiente pieza es el zócalo donde se alojan todos los componentes del siste
 
 ##### Caja del sistema de movimiento
 
-La siguiente pieza es la caja donde se aloja todo el sistema de movimiento de la cámara. De nuevo, en la tapa se ha instaurado una rejilla para permitir la ventilación de todos los componentes. Disponde de agujeros para la colocación de los leds de indicación de conexión y el flash, y para la salida de los cables de alimentación. Dicho diseño queda reflejado en la siguiente /fotos/imagen.
+La siguiente pieza es la caja donde se aloja todo el sistema de movimiento de la cámara. De nuevo, en la tapa se ha instaurado una rejilla para permitir la ventilación de todos los componentes. Disponde de agujeros para la colocación de los leds de indicación de conexión y el flash, y para la salida de los cables de alimentación. Dicho diseño queda reflejado en la siguiente imagen.
 
 <p align="center">
   <img src="/fotos/image-19.png" alt="Descripción de la /fotos/imagen">
@@ -797,13 +797,13 @@ La siguiente pieza es la caja donde se aloja todo el sistema de movimiento de la
 
 ##### Diseño conjunto
 
-Todo el diseño en conjunto viene reflejado en la siguiente /fotos/imagen.
+Todo el diseño en conjunto viene reflejado en la siguiente imagen.
 
 <p align="center">
   <img src="/fotos/image-20.png" alt="Descripción de la /fotos/imagen">
 </p>
 
-Después de la impresión y el montaje, obtenemos el resultado reflejado en la siguiente /fotos/imagen.
+Después de la impresión y el montaje, obtenemos el resultado reflejado en la siguiente imagen.
 
 <p align="center">
   <img src="/fotos/image-21.png" alt="Descripción de la /fotos/imagen">
@@ -811,7 +811,7 @@ Después de la impresión y el montaje, obtenemos el resultado reflejado en la s
 
 ### Implementación de la pasarela Wifi para el Arduino Mega 2560
 
-Finalmente, no hemos sido capaces de terminar de implementar esto, ya que podemos recibir los comandos de movimiento por MQTT pero no hemos podido hacer que el programa de Simulink de la Arduino Mega reciba dichos datos desde la pasarela. Nos ha dado problemas la comunicacíon serie entre ambos dispositivos. Hemos usado un logic level shifter para realizar dicha comunicación y asegurar que no hubiese problemas con la diferencia de niveles de tensión de procesamiento de ambos dispositivos, pero aún así finalmente no hemos conseguido establecer dicha comunicación, ya que constantemente aparecían valores aleatorios o sin sentido en el buffer de datos de llegada, por lo que no hemos podido establecer el control manual para el Piero, aunque se deja abierta la opción de implementarla en un futuro.
+Finalmente, no he sido capaz de terminar de implementar esto, ya que es posible recibir los comandos de movimiento por MQTT pero el programa de Simulink de la Arduino Mega no recibe dichos datos desde la pasarela. Ha dado problemas la comunicacíon serie entre ambos dispositivos. He usado un logic level shifter para realizar dicha comunicación y asegurar que no hubiese problemas con la diferencia de niveles de tensión de procesamiento de ambos dispositivos, sin embargo, el problema radica en que los dispositivos de Espressif y Arduino trabajan con un tipo de comandos distinto en los protocolos de comunicación serie. Por falta de tiempo, no se ha podido llegar a terminar este apartado, pero se deja abierta la posibilidad de completarlo en un futuro.
 
 ### Diseño del flujo de Nodered
 
